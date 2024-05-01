@@ -1,4 +1,1 @@
-const Game = (function (){
-
-    
-})
+const Game = (function (){})
