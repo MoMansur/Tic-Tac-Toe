@@ -1,9 +1,6 @@
 const DOMgrid = document.querySelectorAll('.cell')
-
 const gameBoxDom = document.querySelector('.gameBox')
-
-
-
+const statusMessage = document.getElementById('statusMessage')
 
 
 function Player(name, marker) {
@@ -16,130 +13,132 @@ function Player(name, marker) {
 
 const player1 = new Player('Musa', 'X');
 const player2 = new Player('steve', 'O');
-player1.winner(); 
-player2.winner(); 
 
 
 
 function gameBoard(){
-let   board = ['','','',  '','','', '','','']; 
+let board = ['','','',  '','','', '','','']; 
 
 function gameDisplay(board){
-
   DOMgrid.forEach(cell => {
     const index = parseInt(cell.getAttribute('data-index'));
     cell.innerHTML = board[index]
   });
 }
 
-
-function resetBoard(){
+function resetBoard(board){
   board = ['','','',  '','','', '','','']; 
   return gameDisplay(board)
 }
 
-
-
-function checkForWins(board){
-  const winningCombos = [[0,1,2],[3,4,5],[6,7,8], [0,3,6],[1,4,7],[2,5,8], [0,4,8],[2,4,6]]
-
-
-  for(const positions of winningCombos){
-      const [a,b,c] = positions;
-
-      if (board[a] && board[a] === board[b] && board[b] === board[c] && board[a] !== "") {
-         console.log(board[a]);
-      }else{
-        return 'Tie'
-      }
-
-    }
+return {board, resetBoard, gameDisplay}
 }
-
-
-
-
-const activePlayer = () => player1
-
-return {board, resetBoard, checkForWins, gameDisplay}
-}
-
-
 
 const getBoard = () => gameBoard().board
-const getReset = ()=> gameBoard().resetBoard(getBoard)
+const getReset = ()=> gameBoard().resetBoard(getBoard())
 
-console.log(getBoard())
+//GAME FUNCTION FUNCION
+function gameFunctions(board){
+
+  function refresher(){
+    const timer = setInterval( getReset(), 3000)
+  }
+
+  const checkForWins = (winnerName) => {
+    const winningCombos = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+  
+    for (const positions of winningCombos) {
+      const [a, b, c] = positions;
+  
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        statusMessage.innerText = board[a] +' is the winner';
+
+         return board[a]
+
+      }
+    }
+      if (board.every(cell => cell !== "")) {
+      console.log('tIe') 
+      statusMessage.innerText = 'A TIE';
+
+      return 'Tie'
+    }
+      return null; 
+  };
+
+return {checkForWins,}
+
+}
 
 
-// gameDisplay(getBoard)
-
-
-
+//GAME PLAY FUNCTION
 function gamePlay(){
 
-  function playerInsertMarker(board, playerMarker){
+  let activePlayer = player1;
+
+  const switchPlayerTurn = () => {
+    activePlayer = activePlayer === player1 ? player2 : player1;
+  }
+
+  const getActivePlayer = () => activePlayer;
+  
+
+  function playerInsertMarker(board){
     gameBoxDom.addEventListener('click', (e)=>{
       const clickedGrid = e.target
       const index = parseInt(clickedGrid.getAttribute('data-index'));
-  
-      board[index] =playerMarker
+
+      if(board[index] !== ""){
+        board[index]= board[index]
+      }else{
+        board[index] = activePlayer.marker
+        switchPlayerTurn()
+      }
       console.log(board)
 
       const gameDisplay = () => gameBoard().gameDisplay(board)
-      gameDisplay(getBoard())
+      gameDisplay(board)
+      let gameOver = gameFunctions(board).checkForWins()
+
+     console.log(gameOver)
+     if(gameOver === 'X'){
+      printNewRound(board)
+     }
+
     })
+
+
   }
+
+  function playRound(board){
+   
+  getReset()
+    playerInsertMarker(board, getActivePlayer().marker)
+    
+
+  }
+
+  function printNewRound(board){
+    // getReset()
+    playerInsertMarker(board, getActivePlayer().marker)
   
+  }
+
  
 
-  const activePlayer = () => player1
-  
-
-  function switchTurns(){
-    let playerOneActive = playerInsertMarker(board, player2.marker)
-    let playerTwoActive = playerInsertMarker(board, player1.marker)
-    
-  }
-  
-
-  function printNewRound(){}
-
-  function playRound(){}
-
-
-
-  return{playRound, playerInsertMarker }
-}
-gamePlay().playerInsertMarker(getBoard(), player2.marker)
-
-
-
-
-function gameFunctions(board){
-
-const checkForWins = ()=>{
-  const winningCombos = [[0,1,2],[3,4,5],[6,7,8], [0,3,6],[1,4,7],[2,5,8], [0,4,8],[2,4,6]]
-
-  let finalStatus = '';
-
-  for(const positions of winningCombos){
-      const [a,b,c] = positions;
-
-      if (board[a] && board[a] === board[b] && board[b] === board[c] && board[a] !== "") {
-        return finalStatus = board[a];
-      }else{
-        return finalStatus = 'Tie'
-      }
-
-    }
+  return{playRound, printNewRound, getActivePlayer, switchPlayerTurn}
 }
 
 
-return{checkForWins}
+
+const game = gamePlay()
+game.playRound(getBoard())
+// game.printNewRound()
 
 
-}
 
-gameFunctions(getBoard()).checkForWins()
 
