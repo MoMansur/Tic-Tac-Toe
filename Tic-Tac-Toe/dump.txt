@@ -1,0 +1,9 @@
+// function player(name,mark){
+//   this.name = name
+//   this.marker = mark
+// }
+// const playerOne = new player('Player one', 'X');
+// const playerOneMarker = playerOne.marker;
+
+// const playerTwo = new player('Player Two', 'O')
+// const playerTwoMarker = playerTwo.marker;
