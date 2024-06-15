@@ -7,3 +7,54 @@
 
 // const playerTwo = new player('Player Two', 'O')
 // const playerTwoMarker = playerTwo.marker;
+
+
+
+     const formPlayer1btnX = document.getElementById('formPlayer1btnX')
+        const formPlayer1btnO = document.getElementById('formPlayer1btnO')
+
+        const formPlayer2btnX = document.getElementById('formPlayer2btnX')
+
+        const formPlayer2btnO = document.getElementById('formPlayer2btnO')
+
+
+        const quickPlayBtn = document.getElementById('quickPlayBtn')
+
+
+        formPlayer1btnX.addEventListener('select', ()=>{
+            formPlayer1btnX.style.backgroundColor = 'green'
+            formPlayer2btnX.setAttribute('disabled', true)
+        })
+
+        formPlayer1btnO.addEventListener('click', ()=>{
+            formPlayer2btnO.setAttribute('disabled', true)
+        })
+        
+
+          <div id="userModal" class="modal">
+            <div class="modal-content" style="background-color: lightseagreen;">
+              <h2>Enter Player Information</h2>
+              <form id="userForm" class="form">
+                <div class="formFlex">
+
+              
+                <div class="playerOneForm">
+                    <label for="player1Name">Player 1 Name:</label>
+                    <input type="text" id="player1Name" name="player1Name" class="form-control" required>
+                    <label for="player1Marker">Player 1 Marker:</label>
+                
+                    <button class="btn btn-dark" id="formPlayer1btnX" type="button" >X</button>
+                    <button class="btn btn-dark"id="formPlayer1btnO" type="button">O</button>
+                </div>
+               
+                <div class="playerTwoForm">
+                    <label for="player2Name">Player 2 Name:</label>
+                    <input type="text" id="player2Name" name="player2Name" class="form-control" required>
+                    <label for="player2Marker">Player 2 Marker:</label>
+
+                    <button class="btn btn-dark" id="formPlayer2btnO" type="button">X</button>
+                    <button class="btn btn-dark" id="formPlayer2btnX" type="button">O</button>
+
+                </div>
+
+            </div>
